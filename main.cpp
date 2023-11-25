@@ -291,10 +291,11 @@ void AddBook() {
     BookPIndex bookPIndex;
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in);
     file.seekg(0, ios::end);
-    if (bookPIndex.offset == -1) {
+   
+    bookPIndex.offset = file.tellp();
+     if (bookPIndex.offset == -1) {
         bookPIndex.offset = 0;
     }
-    bookPIndex.offset = file.tellp();
     WriteBookInDataFile(book);
     strcpy(bookPIndex.ISBN, book.ISBN);
     InsertBookInPrimaryIndex(bookPIndex);
