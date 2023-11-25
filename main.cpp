@@ -291,6 +291,9 @@ void AddBook() {
     BookPIndex bookPIndex;
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in);
     file.seekg(0, ios::end);
+    if (bookPIndex.offset == -1) {
+        bookPIndex.offset = 0;
+    }
     bookPIndex.offset = file.tellp();
     WriteBookInDataFile(book);
     strcpy(bookPIndex.ISBN, book.ISBN);
@@ -321,6 +324,9 @@ void AddAuthor() {
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in);
     file.seekg(0, ios::end);
     authorPIndex.offset = file.tellp();
+    if (authorPIndex.offset == -1) {
+        authorPIndex.offset = 0;
+    }
     WriteAuthorInDataFile(author);
     strcpy(authorPIndex.AuthorID, author.AuthorID);
     WriteAuthorInPrimaryIndex(authorPIndex);
