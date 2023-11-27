@@ -61,16 +61,13 @@ bool Sorting_By_SID(Sorting3 S1, Sorting3 S2)
     return (S1.ID < S2.ID);
 }
 void WriteAuthorInPrimaryIndex(AuthorPIndex authorPIndex) {
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::out | ios::app);
-        fstream file("AuthorPIndex.txt", ios::out | ios::app);
-
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::out | ios::app);
     file << authorPIndex.AuthorID << "|" << authorPIndex.offset << "\n";
     file.close();
 }
 void SortAuthorSIndex() {
     vector<Sorting2> sorting;
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::in);
-    fstream file("AuthorSIndex.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::in);
     string line;
     while (getline(file, line)) {
         Sorting2 sorting1;
@@ -83,19 +80,15 @@ void SortAuthorSIndex() {
     }
     file.close();
     sort(sorting.begin(), sorting.end(), Sorting_By_Name);
-    // fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::out);
-    fstream file2("AuthorSIndex.txt", ios::out);
+    fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::out);
     for (int i = 0; i < sorting.size(); i++) {
         file2 << sorting[i].Name << "|" << sorting[i].index << "\n";
     }
     file2.close();
 }
 void WriteAuthorInSecondaryIndex(AuthorSIndex authorSIndex) {
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::out | ios::app | ios::binary | ios::in);
-    // fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt", ios::in | ios::out | ios::app | ios::binary);
-    
-    fstream file("AuthorSIndex.txt", ios::out | ios::app | ios::binary | ios::in);
-    fstream file2("AuthorSIndexInvertedList.txt", ios::in | ios::out | ios::app | ios::binary);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::out | ios::app | ios::binary | ios::in);
+    fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt", ios::in | ios::out | ios::app | ios::binary);
     bool found = false;
     string line;
     while (getline(file, line)) {
@@ -112,9 +105,7 @@ void WriteAuthorInSecondaryIndex(AuthorSIndex authorSIndex) {
     if ( !found) {
         file2<<authorSIndex.AuthorID << "|" << "-1"<< "\n";
         file2.close();
-        // file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt", ios::in | ios::out | ios::binary);
-
-        file2.open("AuthorSIndexInvertedList.txt", ios::in | ios::out | ios::binary);
+        file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt", ios::in | ios::out | ios::binary);
         int index = 0;
         while (getline(file2, line)) {
             if (line==""){
@@ -126,14 +117,12 @@ void WriteAuthorInSecondaryIndex(AuthorSIndex authorSIndex) {
             }
             index++;
         }
-        // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::out | ios::app);
-        file.open("AuthorSIndex.txt", ios::out | ios::app);
+        file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::out | ios::app);
         file << authorSIndex.AuthorName << "|" << index << "\n";
         file.close();
     }
     else {
-        // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::in | ios::out | ios::binary);
-        file.open("AuthorSIndex.txt", ios::in | ios::out | ios::binary);
+        file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::in | ios::out | ios::binary);
         int index = 0;
         while (getline(file, line)) {
             if (line==""){
@@ -149,9 +138,7 @@ void WriteAuthorInSecondaryIndex(AuthorSIndex authorSIndex) {
         }
         file.close();
         file2.close();
-        // file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt",
-        //            ios::in | ios::out | ios::binary);
-        file2.open("AuthorSIndexInvertedList.txt",
+        file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt",
                    ios::in | ios::out | ios::binary);
         vector<map<string, int>> invertedList;
         while (getline(file2, line)) {
@@ -182,9 +169,7 @@ void WriteAuthorInSecondaryIndex(AuthorSIndex authorSIndex) {
         map<string, int> NewInvertedList;
         NewInvertedList.insert(pair<string, int>(authorSIndex.AuthorID, -1));
         invertedList.push_back(NewInvertedList);
-        //  file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt",
-        //            ios::out | ios::binary);
-        file2.open("AuthorSIndexInvertedList.txt",
+        file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt",
                    ios::out | ios::binary);
         for (int i = 0; i < invertedList.size(); i++) {
             map<string, int> invertedList2 = invertedList[i];
@@ -195,8 +180,7 @@ void WriteAuthorInSecondaryIndex(AuthorSIndex authorSIndex) {
     }
 }
 void WriteAuthorInDataFile(Author author) {
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::out | ios::app);
-    fstream file("Author.txt", ios::out | ios::app);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::out | ios::app);
     int size = strlen(author.AuthorID) + strlen(author.AuthorName) + strlen(author.Address) + 4;
     if (size < 10) {
         file << "0" << size << author.AuthorID << "|" << author.AuthorName << "|" << author.Address;
@@ -206,8 +190,7 @@ void WriteAuthorInDataFile(Author author) {
 }
 void SortAuthorPIndex() {
     vector<Sorting> sorting;
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::in);
-    fstream file("AuthorPIndex.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::in);
     string line;
     while (getline(file, line)) {
         Sorting sorting1;
@@ -220,28 +203,20 @@ void SortAuthorPIndex() {
     }
     file.close();
     sort(sorting.begin(), sorting.end(), Sorting_By_ID);
-    // fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::out);
-
-    fstream file2("AuthorPIndex.txt", ios::out);
+    fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::out);
     for (int i = 0; i < sorting.size(); i++) {
         file2 << sorting[i].ID << "|" << sorting[i].offset << "\n";
     }
     file2.close();
 }
 void InsertBookInPrimaryIndex(BookPIndex bookPIndex){
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::out | ios::app);
-
-    fstream file("BookPIndex.txt", ios::out | ios::app);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::out | ios::app);
     file << bookPIndex.ISBN << "|" << bookPIndex.offset << "\n";
     file.close();
 }
 void InsertBookInSecondaryIndex(BookSIndex bookSIndex) {
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out | ios::app | ios::binary|ios::in);
-    // fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt",
-    //               ios::in | ios::out | ios::app | ios::binary);
-    
-    fstream file("BookSIndex.txt", ios::out | ios::app | ios::binary|ios::in);
-    fstream file2("BookSIndexInvertedList.txt",
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out | ios::app | ios::binary|ios::in);
+    fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt",
                   ios::in | ios::out | ios::app | ios::binary);
     bool found = false;
     string line;
@@ -259,9 +234,7 @@ void InsertBookInSecondaryIndex(BookSIndex bookSIndex) {
     if (!found) {
         file2 << bookSIndex.ISBN << "|" << "-1" << "\n";
         file2.close();
-        // file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt",
-        //            ios::in | ios::out | ios::app);
-        file2.open("C:BookSIndexInvertedList.txt",
+        file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt",
                    ios::in | ios::out | ios::app);
         int index = 0;
         while (getline(file2, line)) {
@@ -274,14 +247,11 @@ void InsertBookInSecondaryIndex(BookSIndex bookSIndex) {
             }
             index++;
         }
-        // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out | ios::app | ios::binary);
-
-        file.open("BookSIndex.txt", ios::out | ios::app | ios::binary);
+        file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out | ios::app | ios::binary);
         file << bookSIndex.AuthorID << "|" << index << "\n";
         file.close();
     } else {
-        // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out | ios::app);
-        file.open("BookSIndex.txt", ios::out | ios::app);
+        file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out | ios::app);
         int index = 0;
         while (getline(file, line)) {
             if (line == "") {
@@ -297,9 +267,7 @@ void InsertBookInSecondaryIndex(BookSIndex bookSIndex) {
         }
         file.close();
         file2.close();
-        //  file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt",
-        //            ios::in | ios::out | ios::app);
-        file2.open("BookSIndexInvertedList.txt",
+        file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt",
                    ios::in | ios::out | ios::app);
         vector<map<string, int>> invertedList;
         while (getline(file2, line)) {
@@ -328,9 +296,7 @@ void InsertBookInSecondaryIndex(BookSIndex bookSIndex) {
         map<string, int> NewInvertedList;
         NewInvertedList.insert(pair<string, int>(bookSIndex.ISBN, -1));
         invertedList.push_back(NewInvertedList);
-        // file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt",
-        //            ios::out | ios::trunc);
-        file2.open("BookSIndexInvertedList.txt",
+        file2.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt",
                    ios::out | ios::trunc);
         for (int i = 0; i < invertedList.size(); i++) {
             map<string, int> invertedList2 = invertedList[i];
@@ -341,9 +307,7 @@ void InsertBookInSecondaryIndex(BookSIndex bookSIndex) {
     }
 }
 void WriteBookInDataFile(Book book) {
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::out | ios::app);
-
-    fstream file("Book.txt", ios::out | ios::app);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::out | ios::app);
     int size = strlen(book.ISBN) + strlen(book.Title) + strlen(book.AuthorID) + 4;
     if (size < 10) {
         file << "0" << size << book.ISBN << "|" << book.Title << "|" << book.AuthorID;
@@ -353,9 +317,7 @@ void WriteBookInDataFile(Book book) {
 }
 void SortBookPIndex() {
     vector<Sorting> sorting;
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::in);
-
-    fstream file("BookPIndex.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::in);
     string line;
     while (getline(file, line)) {
         if (line==""){
@@ -368,9 +330,7 @@ void SortBookPIndex() {
     }
     file.close();
     sort(sorting.begin(), sorting.end(), Sorting_By_ID);
-    // fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::out);
-
-    fstream file2("BookPIndex.txt", ios::out);
+    fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::out);
     for (int i = 0; i < sorting.size(); i++) {
         file2 << sorting[i].ID << "|" << sorting[i].offset << "\n";
     }
@@ -378,9 +338,7 @@ void SortBookPIndex() {
 }
 void SortBookSIndex() {
     vector<Sorting3> sorting;
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::in);
-
-    fstream file("BookSIndex.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::in);
     string line;
     while (getline(file, line)) {
         if (line==""){
@@ -396,9 +354,7 @@ void SortBookSIndex() {
         return;
     }
     sort(sorting.begin(), sorting.end(), Sorting_By_SID);
-    // fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out);
-
-    fstream file2("BookSIndex.txt", ios::out);
+    fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out);
     for (int i = 0; i < sorting.size(); i++) {
         file2 << sorting[i].ID << "|" << sorting[i].index << "\n";
     }
@@ -406,9 +362,7 @@ void SortBookSIndex() {
 }
 int SearchBookByISBN(char ISBN[]) {
     int offset = -1;
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::in);
-
-    fstream file("BookPIndex.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::in);
     string line;
     while (getline(file, line)) {
         if (atoi(line.substr(0, line.find("|")).c_str()) == atoi(ISBN)) {
@@ -421,9 +375,7 @@ int SearchBookByISBN(char ISBN[]) {
 }
 int SearchAuthorByID(char ID[]) {
     int offset = -1;
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::in);
-
-    fstream file("AuthorPIndex.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::in);
     string line;
     while (getline(file, line)) {
         if (atoi(line.substr(0, line.find("|")).c_str()) == atoi(ID)) {
@@ -435,9 +387,7 @@ int SearchAuthorByID(char ID[]) {
     return offset;
 }
 void PrintAuthor (int offset) {
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in);
-
-    fstream file("Author.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in);
     file.seekg(offset, ios::beg);
     string line;
     getline(file, line);
@@ -460,10 +410,26 @@ void PrintAuthor (int offset) {
     cout << "Author Address: " << line.substr(0, size) << endl;
     file.close();
 }
+string GetAuthorIdFromBook(char ISBN[]) {
+    int offset = SearchBookByISBN(ISBN);
+    if (offset == -1) {
+        cout << "Book not found" << endl;
+        return "";
+    }
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in);
+    file.seekg(offset, ios::beg);
+    string line;
+    getline(file, line);
+    int size = atoi(line.substr(0, 2).c_str());
+    line = line.substr(2, line.length());
+    size-=2;
+    line = line.substr(line.find("|") + 1, line.length());
+    string AuthorID = line.substr(0, line.find("|"));
+    file.close();
+    return AuthorID;
+}
 void PrintBook (int offset) {
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in);
-
-    fstream file("Book.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in);
     file.seekg(offset, ios::beg);
     string line;
     getline(file, line);
@@ -507,9 +473,7 @@ void AddBook() {
         return;
     }
     BookPIndex bookPIndex;
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in);
-
-    fstream file("Book.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in);
     file.seekg(0, ios::end);
     bookPIndex.offset = file.tellp();
     if (bookPIndex.offset == -1) {
@@ -542,9 +506,7 @@ void AddAuthor() {
         return;
     }
     AuthorPIndex authorPIndex;
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in);
-
-    fstream file("Author.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in);
     file.seekg(0, ios::end);
     authorPIndex.offset = file.tellp();
     if (authorPIndex.offset == -1) {
@@ -561,39 +523,25 @@ void AddAuthor() {
     SortAuthorSIndex();
 }
 void Clear(){
-    // fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::out);
-
-    fstream file("Book.txt", ios::out);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::out);
     file.close();
-    // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::out);
-
-    file.open("BookPIndex.txt", ios::out);
+    file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::out);
     file.close();
-    // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out);
-
-    file.open("BookSIndex.txt", ios::out);
+    file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out);
     file.close();
-    // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt", ios::out);
-
-    file.open("BookSIndexInvertedList.txt", ios::out);
-
+    file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt", ios::out);
     file.close();
-    // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::out);
-
-    file.open("Author.txt", ios::out);
+    file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::out);
     file.close();
-    // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::out);
-
-    file.open("AuthorPIndex.txt", ios::out);
-
+    file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::out);
     file.close();
-    // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::out);
-
-    file.open("AuthorSIndex.txt", ios::out);
+    file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt", ios::out);
     file.close();
-    // file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt", ios::out);
-
-    file.open("AuthorSIndexInvertedList.txt", ios::out);
+    file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt", ios::out);
+    file.close();
+    file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorAvailList.txt", ios::out);
+    file.close();
+    file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookAvailList.txt", ios::out);
     file.close();
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -603,7 +551,7 @@ vector<int> bookAvailList;
 
 vector<int> ReadAuthorAvailList() {
     vector<int> authorAvailList;
-    fstream file("AuthorAvailList.txt", ios::in);
+    fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorAvailList.txt", ios::in);
     string line;
     while (getline(file, line)) {
         authorAvailList.push_back(atoi(line.c_str()));
@@ -614,7 +562,7 @@ vector<int> ReadAuthorAvailList() {
 
 vector<int> ReadBookAvailList() {
     vector<int> bookAvailList;
-    fstream file("BookAvailList.txt", ios::in);
+    fstream file("c:\\Users\\dell\\CLionProjects\\untitled4\\BookAvailList.txt", ios::in);
     string line;
     while (getline(file, line)) {
         bookAvailList.push_back(atoi(line.c_str()));
@@ -624,7 +572,7 @@ vector<int> ReadBookAvailList() {
 }
 
 void WriteAuthorAvailList(vector<int> authorAvailList) {
-    fstream file("AuthorAvailList.txt", ios::out);
+    fstream file("c:\\Users\\dell\\CLionProjects\\untitled4\\AuthorAvailList.txt", ios::out);
     for (int i = 0; i < authorAvailList.size(); i++) {
         file << authorAvailList[i] << "\n";
     }
@@ -632,7 +580,7 @@ void WriteAuthorAvailList(vector<int> authorAvailList) {
 }
 
 void WriteBookAvailList(vector<int> bookAvailList) {
-    fstream file("BookAvailList.txt", ios::out);
+    fstream file("c:\\Users\\dell\\CLionProjects\\untitled4\\BookAvailList.txt", ios::out);
     for (int i = 0; i < bookAvailList.size(); i++) {
         file << bookAvailList[i] << "\n";
     }
@@ -662,34 +610,8 @@ void DeleteFromPrimaryIndex(string primaryIndexFile, string key) {
     }
     file2.close();
 }
-
-// Add this function to delete from the secondary index
-void DeleteFromSecondaryIndex(string secondaryIndexFile, string key) {
-    vector<Sorting2> sorting;
-    fstream file(secondaryIndexFile.c_str(), ios::in);
-    string line;
-    while (getline(file, line)) {
-        Sorting2 sorting1;
-        if (line == "") {
-            break;
-        }
-        sorting1.Name = line.substr(0, line.find("|"));
-        sorting1.index = atoi(line.substr(line.find("|") + 1, line.length()).c_str());
-        if (sorting1.Name != key) {
-            sorting.push_back(sorting1);
-        }
-    }
-    file.close();
-    sort(sorting.begin(), sorting.end(), Sorting_By_Name);
-    fstream file2(secondaryIndexFile.c_str(), ios::out);
-    for (int i = 0; i < sorting.size(); i++) {
-        file2 << sorting[i].Name << "|" << sorting[i].index << "\n";
-    }
-    file2.close();
-}
-
 // New function to delete records from the inverted list
-void DeleteFromInvertedList(string invertedListFile, string key) {
+void DeleteFromInvertedList(string invertedListFile, int key, string ISBN) {
     vector<map<string, int>> invertedList;
     fstream file(invertedListFile.c_str(), ios::in);
     string line;
@@ -697,33 +619,121 @@ void DeleteFromInvertedList(string invertedListFile, string key) {
         if (line == "") {
             break;
         }
-        string Id = line.substr(0, line.find("|"));
-        if (Id != key) {
-            map<string, int> invertedList1;
-            invertedList1.insert(pair<string, int>(Id, atoi(line.substr(line.find("|") + 1, line.length()).c_str())));
-            invertedList.push_back(invertedList1);
+        map<string, int> invertedList1;
+        invertedList1.insert(pair<string, int>(line.substr(0, line.find("|")),
+                                               atoi(line.substr(line.find("|") + 1, line.length()).c_str())));
+        invertedList.push_back(invertedList1);
+    }
+    file.close();
+    if (invertedList[key].begin()->second==-1 && invertedList[key].begin()->first==ISBN) {
+        invertedList[key].begin()->second=-2;
+    }
+    else {
+        map<string, int> it,prev= invertedList[key];
+        it=invertedList[key];
+        while (true){
+            it=invertedList[it.begin()->second];
+            if (it.begin()->first==ISBN){
+                if (it.begin()->second==-1)
+                {
+                    prev.begin()->second=-2;
+                }
+                else {
+                    prev.begin()->second=it.begin()->second;
+                }
+                break;
+            }
+            prev=it;
+        }
+        for (int i = 0; i < invertedList.size(); i++) {
+            if (invertedList[i].begin()->first == prev.begin()->first) {
+                invertedList[i] = prev;
+                break;
+            }
+        }
+    }
+    fstream file2(invertedListFile.c_str(), ios::out);
+    for (int i = 0; i < invertedList.size(); i++) {
+        file2 << invertedList[i].begin()->first << "|" << invertedList[i].begin()->second << "\n";
+    }
+    file2.close();
+
+}
+// Add this function to delete from the secondary index
+void DeleteFromSecondaryIndex(string secondaryIndexFile, string key , string ISBN) {
+    fstream file(secondaryIndexFile.c_str(), ios::in);
+    string line;
+    int index = 0;
+    vector<Sorting2> sorting;
+    while (getline(file, line)) {
+        Sorting2 sorting1;
+        if (line == "") {
+            break;
+        }
+        sorting1.Name = line.substr(0, line.find("|"));
+        sorting1.index = atoi(line.substr(line.find("|") + 1, line.length()).c_str());
+        if (sorting1.Name == key) {
+            index = sorting1.index;
+        }
+        sorting.push_back(sorting1);
+    }
+    file.close();
+    fstream file2("c:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt", ios::in);
+    vector<map<string, int>> invertedList;
+    while (getline(file2, line)) {
+        if (line == "") {
+            break;
+        }
+        map<string, int> invertedList1;
+        invertedList1.insert(pair<string, int>(line.substr(0, line.find("|")),
+                                               atoi(line.substr(line.find("|") + 1, line.length()).c_str())));
+        invertedList.push_back(invertedList1);
+    }
+    file2.close();
+    bool flag = false;
+    if (invertedList[index].begin()->second == -1) {
+        flag = true;
+    }
+    cout << invertedList[index].begin()->first <<"&"<<index<<endl;
+    if (flag== true){
+        file.close();
+        file.open(secondaryIndexFile.c_str(), ios::out);
+        for (int i = 0; i < sorting.size(); i++) {
+            if (sorting[i].Name == key) {
+                file << sorting[i].Name << "|" << -1 << "\n";
+            }
+            else {
+                file << sorting[i].Name << "|" << sorting[i].index << "\n";
+            }
+        }
+    }
+    else {
+        file.close();
+        file.open(secondaryIndexFile.c_str(), ios::out);
+        for (int i = 0; i < sorting.size(); i++) {
+            if (sorting[i].Name == key) {
+                if (invertedList[index].begin()->first == ISBN) {
+                    file << sorting[i].Name << "|" << invertedList[index].begin()->second << "\n";
+                }
+                else {
+                    file << sorting[i].Name << "|" << sorting[i].index << "\n";
+                }
+            } else {
+                file << sorting[i].Name << "|" << sorting[i].index << "\n";
+            }
         }
     }
     file.close();
-    fstream file2(invertedListFile.c_str(), ios::out);
-    for (int i = 0; i < invertedList.size(); i++) {
-        map<string, int> invertedList2 = invertedList[i];
-        for (auto itr = invertedList2.begin(); itr != invertedList2.end(); ++itr) {
-            file2 << itr->first << "|" << itr->second << "\n";
-        }
-    }
-    file2.close();
+    DeleteFromInvertedList("c:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt", index, ISBN);
 }
-
 void DeleteBook(char ISBN[]) {
     int offset = SearchBookByISBN(ISBN);
-
+    string ID= GetAuthorIdFromBook(ISBN);
     if (offset == -1) {
         cout << "Book ISBN doesn't exist" << endl;
         return;
     }
-    fstream file("Book.txt", ios::in);
-    // read the record length
+    fstream file("c:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in | ios::out);
     file.seekg(offset, ios::beg);
     string line;
     getline(file, line);
@@ -731,8 +741,7 @@ void DeleteBook(char ISBN[]) {
     line = line.substr(2, line.length());
     file.close();
 
-    file.open("Book.txt", ios::in | ios::out);
-    // overwrite the record with * last offset in avail list | record length | the rest of the record is filled with -
+    file.open("c:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in | ios::out);
     file.seekp(offset, ios::beg);
 
     if (bookAvailList.empty()) {
@@ -746,72 +755,17 @@ void DeleteBook(char ISBN[]) {
         file << "-";
     }
     file.close();
-
     // Update primary index
-    DeleteFromPrimaryIndex("BookPIndex.txt", ISBN);
+    DeleteFromPrimaryIndex("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ISBN);
 
     // Delete from the secondary index
-    DeleteFromSecondaryIndex("BookSIndex.txt", ISBN);
-
-    // Delete from the inverted list
-    DeleteFromInvertedList("BookSIndexInvertedList.txt", ISBN);
+    DeleteFromSecondaryIndex("c:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ID, ISBN);
 
     // add the offset to the avail list
     bookAvailList.push_back(offset);
     WriteBookAvailList(bookAvailList);
-
     cout << "Book deleted successfully" << endl;
 }
-
-
-void DeleteBooksByAuthorID(char AuthorID[]) {
-    // Get the index in the inverted list from the secondary index
-    int indexInInvertedList = -1;
-    fstream secondaryIndexFile("BookSIndex.txt", ios::in);
-    string line;
-    while (getline(secondaryIndexFile, line)) {
-        if (line == "") {
-            break;
-        }
-        Sorting3 sorting1;
-        sorting1.ID = atoi(line.substr(0, line.find("|")).c_str());
-        sorting1.index = atoi(line.substr(line.find("|") + 1, line.length()).c_str());
-        if (to_string(sorting1.ID) == AuthorID) {
-            // Found the author in the secondary index
-            indexInInvertedList = sorting1.index;
-            break;
-        }
-    }
-    secondaryIndexFile.close();
-
-    if (indexInInvertedList == -1) {
-        cout << "Author ID doesn't exist" << endl;
-        return;
-    }
-
-    // Get the list of book ISBNs related to the author from the inverted list
-    vector<string> bookISBNs;
-    fstream invertedListFile("BookSIndexInvertedList.txt", ios::in);
-    while (getline(invertedListFile, line)) {
-        if (line == "") {
-            break;
-        }
-        string Id = line.substr(0, line.find("|"));
-        if (Id == to_string(indexInInvertedList)) {
-            // Found a book related to the author
-            bookISBNs.push_back(line.substr(line.find("|") + 1, line.length()));
-        }
-    }
-    invertedListFile.close();
-
-    // Delete each book by ISBN
-    for (const string& ISBN : bookISBNs) {
-        DeleteBook(const_cast<char*>(ISBN.c_str()));
-    }
-}
-
-
-
 
 void DeleteAuthor(char AuthorID[]) {
     int offset = SearchAuthorByID(AuthorID);
@@ -851,13 +805,11 @@ void DeleteAuthor(char AuthorID[]) {
     DeleteFromPrimaryIndex("AuthorPIndex.txt", AuthorID);("AuthorPIndex.txt", AuthorID);
 
     // Delete from the secondary index
-    DeleteFromSecondaryIndex("AuthorSIndex.txt", AuthorID);
+    //DeleteFromSecondaryIndex("AuthorSIndex.txt", AuthorID);
 
     // Delete from the inverted list
-    DeleteFromInvertedList("AuthorSIndexInvertedList.txt", AuthorID);
+    //DeleteFromInvertedList("AuthorSIndexInvertedList.txt", "BookSIndex.txt", AuthorID);
 
-    // Delete related books
-    DeleteBooksByAuthorID(AuthorID);
 
     // add the offset to the avail list
     authorAvailList.push_back(offset);
@@ -865,7 +817,6 @@ void DeleteAuthor(char AuthorID[]) {
 
     cout << "Author deleted successfully" << endl;
 }
-
 
 
 void updateAuthorName(char AuthorID[] ,char AuthorName [] ){
@@ -898,14 +849,14 @@ void updateAuthorName(char AuthorID[] ,char AuthorName [] ){
     size -= line.substr(0, line.find("|")).length()+1;
     oldsize += line.substr(0, line.find("|")).length()+1;
     line = line.substr(line.find("|") + 1, line.length());
-    
+
     string oldName =  line.substr(0, line.find("|"));
 
     file.close();
 
 
 
-   
+
 
     if(oldName.length() < strlen(AuthorName)){
         cout << "Author name is too long"<< endl;
@@ -965,14 +916,14 @@ void updateBookTitle(char ISBN[] ,char BookTitle [] ){
     size -= line.substr(0, line.find("|")).length()+1;
     oldsize += line.substr(0, line.find("|")).length()+1;
     line = line.substr(line.find("|") + 1, line.length());
-    
+
     string oldTitle =  line.substr(0, line.find("|"));
 
     file.close();
 
 
 
-   
+
 
     if(oldTitle.length() < strlen(BookTitle)){
         cout << "Book Title is too long"<< endl;
@@ -1003,11 +954,7 @@ void updateBookTitle(char ISBN[] ,char BookTitle [] ){
 }
 
 
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 int main(){
     authorAvailList = ReadAuthorAvailList();
