@@ -61,10 +61,30 @@ bool Sorting_By_SID(Sorting3 S1, Sorting3 S2)
     return (S1.ID < S2.ID);
 }
 bool ValidationID(string id) {
+    if (id.length() > 15) {
+        return false;
+    }
     for (int i = 0; i < id.length(); i++) {
         if (id[i] < '0' || id[i] > '9') {
             return false;
         }
+    }
+    return true;
+}
+bool ValidationName(string name) {
+    if (name.length() > 30) {
+        return false;
+    }
+    for (int i = 0; i < name.length(); i++) {
+        if (name[i] < 'A' || name[i] > 'z') {
+            return false;
+        }
+    }
+    return true;
+}
+bool ValidationAddress(string address) {
+    if (address.length() > 30) {
+        return false;
     }
     return true;
 }
@@ -423,7 +443,15 @@ void PrintAuthor (int offset) {
     cout << "Author Name: " << line.substr(0, line.find("|")) << endl;
     size -= line.substr(0, line.find("|")).length()+1 ;
     line = line.substr(line.find("|") + 1, line.length());
-    cout << "Author Address: " << line.substr(0, size) << endl;
+    string Address = line.substr(0, size), Address2;
+    for (int i = 0; i < Address.length(); i++) {
+        if (Address[i] == '-') {
+            break;
+        } else {
+            Address2 += Address[i];
+        }
+    }
+    cout << "Author Address: " << Address2 << endl;
     file.close();
 }
 string GetAuthorIdFromBook(char ISBN[]) {
@@ -483,7 +511,15 @@ void PrintBook (int offset) {
     cout << "Book ISBN: " << line.substr(0, line.find("|")) << endl;
     size -= line.substr(0, line.find("|")).length()+1;
     line = line.substr(line.find("|") + 1, line.length());
-    cout << "Book Title: " << line.substr(0, line.find("|")) << endl;
+    string Title = line.substr(0, line.find("|")) , Title2;
+    for (int i = 0; i < Title.length(); i++) {
+        if (Title[i] == '-') {
+            break;
+        } else {
+            Title2 += Title[i];
+        }
+    }
+    cout << "Book Title: " << Title2 << endl;
     size -= line.substr(0, line.find("|")).length()+1 ;
     line = line.substr(line.find("|") + 1, line.length());
     cout << "Book Author ID: " << line.substr(0, size) << endl;
@@ -503,14 +539,14 @@ void AddBook() {
     }
     cout << "Enter Book Title: ";
     cin >> book.Title;
+    if (!ValidationName(book.Title)) {
+        cout << "Invalid Title" << endl;
+        return;
+    }
     cout << "Enter Book Author ID: ";
     cin >> book.AuthorID;
     if (SearchAuthorByID(book.AuthorID) == -1) {
         cout << "Author doesn't exist" << endl;
-        return;
-    }
-    if (strlen(book.ISBN) > 10 || strlen(book.Title) > 20 || strlen(book.AuthorID) > 10) {
-        cout << "Invalid Input" << endl;
         return;
     }
     BookPIndex bookPIndex;
@@ -529,6 +565,8 @@ void AddBook() {
     InsertBookInSecondaryIndex(bookSIndex);
     SortBookPIndex();
     SortBookSIndex();
+    file.close();
+    cout << "Book added successfully" << endl;
 }
 void AddAuthor() {
     Author author;
@@ -544,10 +582,14 @@ void AddAuthor() {
     }
     cout << "Enter Author Name: ";
     cin >> author.AuthorName;
+    if (!ValidationName(author.AuthorName)) {
+        cout << "Invalid Name" << endl;
+        return;
+    }
     cout << "Enter Author Address: ";
     cin >> author.Address;
-    if (strlen(author.AuthorID) > 15 || strlen(author.AuthorName) > 30 || strlen(author.Address) > 30) {
-        cout << "Error: Invalid Input" << endl;
+    if (!ValidationAddress(author.Address)) {
+        cout << "Invalid Address" << endl;
         return;
     }
     AuthorPIndex authorPIndex;
@@ -566,6 +608,8 @@ void AddAuthor() {
     WriteAuthorInSecondaryIndex(authorSIndex);
     SortAuthorPIndex();
     SortAuthorSIndex();
+    file.close();
+    cout << "Author added successfully" << endl;
 }
 void Clear(){
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::out);
@@ -590,10 +634,8 @@ void Clear(){
     file.close();
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
 vector<int> authorAvailList;
 vector<int> bookAvailList;
-
 vector<int> ReadAuthorAvailList() {
     vector<int> authorAvailList;
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorAvailList.txt", ios::in);
@@ -604,7 +646,6 @@ vector<int> ReadAuthorAvailList() {
     file.close();
     return authorAvailList;
 }
-
 vector<int> ReadBookAvailList() {
     vector<int> bookAvailList;
     fstream file("c:\\Users\\dell\\CLionProjects\\untitled4\\BookAvailList.txt", ios::in);
@@ -623,7 +664,6 @@ void WriteAuthorAvailList(vector<int> authorAvailList) {
     }
     file.close();
 }
-
 void WriteBookAvailList(vector<int> bookAvailList) {
     fstream file("c:\\Users\\dell\\CLionProjects\\untitled4\\BookAvailList.txt", ios::out);
     for (int i = 0; i < bookAvailList.size(); i++) {
@@ -631,7 +671,6 @@ void WriteBookAvailList(vector<int> bookAvailList) {
     }
     file.close();
 }
-
 void DeleteFromPrimaryIndex(string primaryIndexFile, string key) {
     vector<Sorting> sorting;
     fstream file(primaryIndexFile.c_str(), ios::in);
@@ -998,45 +1037,9 @@ void DeleteAuthor(char ID[]) {
     cout << "Book deleted successfully" << endl;
 }
 //////////////////////////////////////
-void updateAuthorName(char AuthorID[] ,char AuthorName [] ){
-    int offset = SearchAuthorByID(AuthorID);
-    if(offset == -1){
-        cout << "Author ID doesn't exist" << endl;
-        return;
-    }
-    fstream file("c:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in | ios::out);
-    file.seekg(offset, ios::beg);
-    string line;
-    getline(file, line);
-    int size = atoi(line.substr(0, 2).c_str());
-    int oldsize = 0;
-    line = line.substr(2, line.length());
-    size-=2;
-    oldsize = oldsize +2;
-    size -= line.substr(0, line.find("|")).length()+1;
-    oldsize += line.substr(0, line.find("|")).length()+1;
-    line = line.substr(line.find("|") + 1, line.length());
-    string oldName =  line.substr(0, line.find("|"));
-    file.close();
-    if(oldName.length() < strlen(AuthorName)){
-        cout << "Author name is too long"<< endl;
-        return;
-    }
-    file.open("c:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in | ios::out);
-    file.seekp(offset+oldsize, ios::beg);
-    file<<AuthorName;
-    int empty = oldName.length()- strlen(AuthorName);
-
-    for (int i = 0; i <empty; i++) {
-        file << "-";
-    }
-    cout<<"update successfully"<<endl;
-    file.close();
-}
 
 void updateBookTitle(char ISBN[] ,char BookTitle [] ){
     int offset = SearchBookByISBN(ISBN);
-
     if(offset == -1){
         cout << "ISBN doesn't exist" << endl;
         return;
@@ -1059,11 +1062,13 @@ void updateBookTitle(char ISBN[] ,char BookTitle [] ){
         cout << "Book Title is too long"<< endl;
         return;
     }
-
+    if (!ValidationName(BookTitle)) {
+        cout << "Book Title is not valid" << endl;
+        return;
+    }
     file.open("c:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in | ios::out);
     file.seekp(offset+oldsize, ios::beg);
     file<<BookTitle;
-
     int empty = oldTitle.length()- strlen(BookTitle);
 
     for (int i = 0; i <empty; i++) {
@@ -1073,6 +1078,49 @@ void updateBookTitle(char ISBN[] ,char BookTitle [] ){
     cout<<"update successfully"<<endl;
     file.close();
 }
+void updateAuthorAddress(char AuthorID[] , char Address [] ){
+    int offset = SearchAuthorByID(AuthorID);
+    if(offset == -1){
+        cout << "Author ID doesn't exist" << endl;
+        return;
+    }
+    fstream file("c:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in | ios::out);
+    file.seekg(offset, ios::beg);
+    string line;
+    getline(file, line);
+    int size = atoi(line.substr(0, 2).c_str());
+    int oldsize = 0;
+    line = line.substr(2, line.length());
+    size-=2;
+    oldsize = oldsize +2;
+    size -= line.substr(0, line.find("|")).length()+1;
+    oldsize += line.substr(0, line.find("|")).length()+1;
+    line = line.substr(line.find("|") + 1, line.length());
+    size -= line.substr(0, line.find("|")).length()+1;
+    oldsize += line.substr(0, line.find("|")).length()+1;
+    line = line.substr(line.find("|") + 1, line.length());
+    string oldAddress =  line.substr(0, size);
+    cout << oldAddress << endl;
+    file.close();
+    if(oldAddress.length() < strlen(Address)){
+        cout << "Address is too long"<< endl;
+        return;
+    }
+    if (!ValidationName(Address)) {
+        cout << "Address is not valid" << endl;
+        return;
+    }
+    file.open("c:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in | ios::out);
+    file.seekp(offset+oldsize, ios::beg);
+    file<<Address;
+    int empty = oldAddress.length()- strlen(Address);
+    for (int i = 0; i <empty; i++) {
+        file << "-";
+    }
+    cout<<"update successfully"<<endl;
+    file.close();
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // salma work
 vector<string> ReadAllBooks(char authorId[]) {
@@ -1143,7 +1191,6 @@ string GetAuthorName(char authorId[]) {
     vector<map<string, int>> sIndex;
     int index = 0;
 
-//    ifstream file1("AuthorSIndex.txt");
     ifstream file1("c:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndex.txt");
     if (!file1.is_open()) {
         cout << "Error opening secondary index file" << endl;
@@ -1165,8 +1212,6 @@ string GetAuthorName(char authorId[]) {
         sIndex.push_back(add);
     }
     file1.close();
-
-//    ifstream file("AuthorSIndexInvertedList.txt");
     ifstream file("c:\\Users\\dell\\CLionProjects\\untitled4\\AuthorSIndexInvertedList.txt");
 
     for (auto &i : sIndex) {
@@ -1278,7 +1323,7 @@ int main(){
         cout << "7- Delete Author" << endl;
         cout << "8- Delete Book" << endl;
         cout << "9- Execute Query" << endl;
-        cout << "10- Clear" << endl;
+        cout << "10- Clear All Data From All Files" << endl;
         cout << "11- Exit" << endl;
         cout << "Enter your choice: ";
         cin >> choice;
@@ -1294,10 +1339,14 @@ int main(){
                 cout << "Invalid ID" << endl;
                 continue;
             }
-            char AuthorName[30];
-            cout << "Enter Author Name: ";
-            cin >> AuthorName;
-            updateAuthorName(AuthorID , AuthorName);
+            char AuthorAddress[30];
+            cout << "Enter new Author Address: ";
+            cin >> AuthorAddress;
+            if (!ValidationAddress(AuthorAddress)) {
+                cout << "Invalid Address" << endl;
+                continue;
+            }
+            updateAuthorAddress(AuthorID, AuthorAddress);
         } else if (choice == 4) {
             char ISBN[15];
             cout << "Enter ISBN: ";
@@ -1307,12 +1356,16 @@ int main(){
                 continue;
             }
             char bookTitle[30];
-            cout << "Enter book Title: ";
+            cout << "Enter new book title: ";
             cin >> bookTitle;
+            if (!ValidationName(bookTitle)) {
+                cout << "Invalid Title" << endl;
+                continue;
+            }
             updateBookTitle(ISBN , bookTitle);
         }
         else if (choice == 5) {
-            char ID[20];
+            char ID[15];
             cout << "Enter Author ID: ";
             cin >> ID;
             if (!ValidationID(ID)) {
@@ -1327,7 +1380,7 @@ int main(){
             }
         }
         else if (choice == 6) {
-            char ISBN[20];
+            char ISBN[15];
             cout << "Enter Book ISBN: ";
             cin >> ISBN;
             if (!ValidationID(ISBN)) {
@@ -1343,7 +1396,7 @@ int main(){
             }
         }
         else if (choice == 7) {
-            char AuthorID[20];
+            char AuthorID[15];
             cout << "Enter Author ID: ";
             cin >> AuthorID;
             if (!ValidationID(AuthorID)) {
