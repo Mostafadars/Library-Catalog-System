@@ -440,19 +440,20 @@ void PrintAuthor (int offset) {
     cout << "Author ID: " << line.substr(0, line.find("|")) << endl;
     size -= line.substr(0, line.find("|")).length()+1;
     line = line.substr(line.find("|") + 1, line.length());
-    cout << "Author Name: " << line.substr(0, line.find("|")) << endl;
-    size -= line.substr(0, line.find("|")).length()+1 ;
-    line = line.substr(line.find("|") + 1, line.length());
-    string Address = line.substr(0, size), Address2;
-    for (int i = 0; i < Address.length(); i++) {
-        if (Address[i] == '-') {
+    string name = line.substr(0, line.find("|")), temp;
+    for (int i = 0; i < name.length(); i++) {
+        if (name[i] == '-') {
             break;
         } else {
-            Address2 += Address[i];
+            temp += name[i];
         }
     }
-    cout << "Author Address: " << Address2 << endl;
+    cout << "Author Name: " << temp << endl;
+    size -= line.substr(0, line.find("|")).length()+1;
+    line = line.substr(line.find("|") + 1, line.length());
+    cout << "Author Address: " << line.substr(0, size) << endl;
     file.close();
+    
 }
 string GetAuthorIdFromBook(char ISBN[]) {
     int offset = SearchBookByISBN(ISBN);
@@ -1062,10 +1063,6 @@ void updateBookTitle(char ISBN[] ,char BookTitle [] ){
         cout << "Book Title is too long"<< endl;
         return;
     }
-    if (!ValidationName(BookTitle)) {
-        cout << "Book Title is not valid" << endl;
-        return;
-    }
     file.open("c:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in | ios::out);
     file.seekp(offset+oldsize, ios::beg);
     file<<BookTitle;
@@ -1078,9 +1075,10 @@ void updateBookTitle(char ISBN[] ,char BookTitle [] ){
     cout<<"update successfully"<<endl;
     file.close();
 }
-void updateAuthorAddress(char AuthorID[] , char Address [] ){
+void updateAuthorName(char AuthorID[] ,char AuthorName [] ) {
     int offset = SearchAuthorByID(AuthorID);
-    if(offset == -1){
+
+    if (offset == -1) {
         cout << "Author ID doesn't exist" << endl;
         return;
     }
@@ -1091,35 +1089,65 @@ void updateAuthorAddress(char AuthorID[] , char Address [] ){
     int size = atoi(line.substr(0, 2).c_str());
     int oldsize = 0;
     line = line.substr(2, line.length());
-    size-=2;
-    oldsize = oldsize +2;
-    size -= line.substr(0, line.find("|")).length()+1;
-    oldsize += line.substr(0, line.find("|")).length()+1;
+    size -= 2;
+    oldsize = oldsize + 2;
+    size -= line.substr(0, line.find("|")).length() + 1;
+    oldsize += line.substr(0, line.find("|")).length() + 1;
     line = line.substr(line.find("|") + 1, line.length());
-    size -= line.substr(0, line.find("|")).length()+1;
-    oldsize += line.substr(0, line.find("|")).length()+1;
-    line = line.substr(line.find("|") + 1, line.length());
-    string oldAddress =  line.substr(0, size);
-    cout << oldAddress << endl;
+    string oldName = line.substr(0, line.find("|"));
     file.close();
-    if(oldAddress.length() < strlen(Address)){
-        cout << "Address is too long"<< endl;
-        return;
-    }
-    if (!ValidationName(Address)) {
-        cout << "Address is not valid" << endl;
+    if (oldName.length() < strlen(AuthorName)) {
+        cout << "Author name is too long" << endl;
         return;
     }
     file.open("c:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in | ios::out);
-    file.seekp(offset+oldsize, ios::beg);
-    file<<Address;
-    int empty = oldAddress.length()- strlen(Address);
-    for (int i = 0; i <empty; i++) {
+    file.seekp(offset + oldsize, ios::beg);
+    file << AuthorName;
+    int empty = oldName.length() - strlen(AuthorName);
+    for (int i = 0; i < empty; i++) {
         file << "-";
     }
-    cout<<"update successfully"<<endl;
+    cout << "update successfully" << endl;
     file.close();
 }
+//void updateAuthorAddress(char AuthorID[] , char Address [] ){
+//    int offset = SearchAuthorByID(AuthorID);
+//    if(offset == -1){
+//        cout << "Author ID doesn't exist" << endl;
+//        return;
+//    }
+//    fstream file("c:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in | ios::out);
+//    file.seekg(offset, ios::beg);
+//    string line;
+//    getline(file, line);
+//    int size = atoi(line.substr(0, 2).c_str());
+//    int oldsize = 0;
+//    line = line.substr(2, line.length());
+//    size-=2;
+//    oldsize = oldsize +2;
+//    size -= line.substr(0, line.find("|")).length()+1;
+//    oldsize += line.substr(0, line.find("|")).length()+1;
+//    line = line.substr(line.find("|") + 1, line.length());
+//    size -= line.substr(0, line.find("|")).length()+1;
+//    oldsize += line.substr(0, line.find("|")).length()+1;
+//    line = line.substr(line.find("|") + 1, line.length());
+//    string oldAddress =  line.substr(0, size);
+//    cout << oldAddress << endl;
+//    file.close();
+//    if(oldAddress.length() < strlen(Address)){
+//        cout << "Address is too long"<< endl;
+//        return;
+//    }
+//    file.open("c:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in | ios::out);
+//    file.seekp(offset+oldsize, ios::beg);
+//    file<<Address;
+//    int empty = oldAddress.length()- strlen(Address);
+//    for (int i = 0; i <empty; i++) {
+//        file << "-";
+//    }
+//    cout<<"update successfully"<<endl;
+//    file.close();
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // salma work
@@ -1339,14 +1367,14 @@ int main(){
                 cout << "Invalid ID" << endl;
                 continue;
             }
-            char AuthorAddress[30];
+            char AuthorName[30];
             cout << "Enter new Author Address: ";
-            cin >> AuthorAddress;
-            if (!ValidationAddress(AuthorAddress)) {
-                cout << "Invalid Address" << endl;
+            cin >> AuthorName;
+           if (!ValidationName(AuthorName)) {
+                cout << "Invalid Name" << endl;
                 continue;
             }
-            updateAuthorAddress(AuthorID, AuthorAddress);
+            updateAuthorName(AuthorID, AuthorName);
         } else if (choice == 4) {
             char ISBN[15];
             cout << "Enter ISBN: ";
