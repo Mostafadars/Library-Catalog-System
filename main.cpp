@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+
 int authorAvailList = -1;
 int bookAvailList = -1;
 
@@ -74,6 +75,7 @@ void WriteBookAvailList(int bookAvailList) {
         file << bookAvailList;
     file.close();
 }
+
 struct Author {
     char AuthorID [15];
     char AuthorName [30];
@@ -300,6 +302,7 @@ void WriteAuthorInSecondaryIndex(AuthorSIndex authorSIndex) {
         }
     }
 }
+
 vector<pair<int,int>> ReturnAllAvaliableOffsets (string s,int Read) {
     int Avail=Read;
     vector<pair<int,int>> offsets;
@@ -320,6 +323,7 @@ vector<pair<int,int>> ReturnAllAvaliableOffsets (string s,int Read) {
     }
     return offsets;
 }
+
 void UpdateOffsetInFile(vector<pair<int,int>> offsets,string s) {
     s ="c:\\Users\\dell\\CLionProjects\\untitled4"+s;
     if (offsets.size()==0) return;
@@ -332,6 +336,7 @@ void UpdateOffsetInFile(vector<pair<int,int>> offsets,string s) {
         file.close();
     }
 }
+
 int  WriteAuthorInDataFile(Author author) {
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::in | ios::out | ios::app);
     int size = strlen(author.AuthorID) + strlen(author.AuthorName) + strlen(author.Address) + 4;
@@ -385,6 +390,7 @@ int  WriteAuthorInDataFile(Author author) {
     return -1;
     file.close();
 }
+
 void SortAuthorPIndex() {
     vector<Sorting> sorting;
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\AuthorPIndex.txt", ios::in);
@@ -406,11 +412,13 @@ void SortAuthorPIndex() {
     }
     file2.close();
 }
+
 void InsertBookInPrimaryIndex(BookPIndex bookPIndex){
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookPIndex.txt", ios::out | ios::app);
     file << bookPIndex.ISBN << "|" << bookPIndex.offset << "\n";
     file.close();
 }
+
 void InsertBookInSecondaryIndex(BookSIndex bookSIndex) {
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndex.txt", ios::out | ios::app | ios::binary|ios::in);
     fstream file2("C:\\Users\\dell\\CLionProjects\\untitled4\\BookSIndexInvertedList.txt",
@@ -680,6 +688,7 @@ void PrintAuthor (int offset) {
 
     file.close();
 }
+
 string GetAuthorIdFromBook(char ISBN[]) {
     int offset = SearchBookByISBN(ISBN);
     if (offset == -1) {
@@ -701,6 +710,7 @@ string GetAuthorIdFromBook(char ISBN[]) {
     return authorID;
     file.close();
 }
+
 string GetAuthorNameFromAuthorID(char ID[]) {
     int offset = SearchAuthorByID(ID);
     if (offset == -1) {
@@ -719,6 +729,7 @@ string GetAuthorNameFromAuthorID(char ID[]) {
     file.close();
     return AuthorName;
 }
+
 void PrintBook (int offset) {
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Book.txt", ios::in);
     file.seekg(offset, ios::beg);
@@ -759,6 +770,7 @@ void PrintBook (int offset) {
     cout << "Book Author ID: " << authorID2 << endl;
     file.close();
 }
+
 void AddBook() {
     Book book;
     cout << "Enter Book ISBN: ";
@@ -881,7 +893,8 @@ void Clear(){
     file.open("C:\\Users\\dell\\CLionProjects\\untitled4\\BookAvailList.txt", ios::out);
     file.close();
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////
 
 void DeleteFromPrimaryIndex(string primaryIndexFile, string key) {
     vector<Sorting> sorting;
@@ -907,7 +920,6 @@ void DeleteFromPrimaryIndex(string primaryIndexFile, string key) {
     file2.close();
 }
 
-// New function to delete records from the inverted list
 void DeleteFromInvertedListBook(string invertedListFile, int key, string ISBN) {
     vector<map<string, int>> invertedList;
     fstream file(invertedListFile.c_str(), ios::in);
@@ -981,7 +993,6 @@ void DeleteFromInvertedListBook(string invertedListFile, int key, string ISBN) {
     file2.close();
 }
 
-// Add this function to delete from the secondary index
 void DeleteFromSecondaryIndexBook(string secondaryIndexFile, string ID , string ISBN) {
     fstream file(secondaryIndexFile.c_str(), ios::in);
     string line;
@@ -1275,7 +1286,7 @@ void DeleteAuthor(char ID[]) {
     cout << "Author deleted successfully" << endl;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////
 
 void updateBookTitle(char ISBN[] ,char BookTitle [] ){
     int offset = SearchBookByISBN(ISBN);
@@ -1389,8 +1400,8 @@ void updateAuthorName(char AuthorID[] ,char AuthorName [] ) {
 //    file.close();
 //}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// salma work
+///////////////////////////////////////////
+
 vector<string> ReadAllBooks(char authorId[]) {
     vector<string> bookISBNs;
     int index = 0;
@@ -1505,7 +1516,6 @@ string GetAuthorName(char authorId[]) {
     }
 }
 
-// Function to execute a query
 void ExecuteQuery(const string& query) {
     // Tokenize the query
     stringstream ss(query);
@@ -1571,7 +1581,7 @@ void ExecuteQuery(const string& query) {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////
 
 void WriteInFirstOfAuthorFile() {
     fstream file("C:\\Users\\dell\\CLionProjects\\untitled4\\Author.txt", ios::out | ios::app);
@@ -1593,12 +1603,16 @@ void WriteInFirstOfBookFile() {
         WriteBookAvailList(-1);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////
+
 int main(){
     WriteInFirstOfAuthorFile();
     WriteInFirstOfBookFile();
+
     while (true){
         int choice;
+        cout << "=====================================================" << endl;
+        cout << "\t\t\t Library System \t\t\t" << endl;
         cout << "1- Add Author" << endl;
         cout << "2- Add Book" << endl;
         cout << "3- update Author" << endl;
@@ -1612,11 +1626,18 @@ int main(){
         cout << "11- Exit" << endl;
         cout << "Enter your choice: ";
         cin >> choice;
+        cout << "=====================================================" << endl;
+
         if (choice == 1) {
+            cout << "=====================================================" << endl;
             AddAuthor();
+            cout << "=====================================================" << endl;
         } else if (choice == 2) {
+            cout << "=====================================================" << endl;
             AddBook();
+            cout << "=====================================================" << endl;
         } else if (choice == 3) {
+            cout << "=====================================================" << endl;
             char AuthorID[15];
             cout << "Enter Author ID: ";
             cin >> AuthorID;
@@ -1632,7 +1653,9 @@ int main(){
                 continue;
             }
             updateAuthorName(AuthorID, AuthorName);
+            cout << "=====================================================" << endl;
         } else if (choice == 4) {
+            cout << "=====================================================" << endl;
             char ISBN[15];
             cout << "Enter ISBN: ";
             cin >>ISBN;
@@ -1648,8 +1671,10 @@ int main(){
                 continue;
             }
             updateBookTitle(ISBN , bookTitle);
+            cout << "=====================================================" << endl;
         }
         else if (choice == 5) {
+            cout << "=====================================================" << endl;
             char ID[15];
             cout << "Enter Author ID: ";
             cin >> ID;
@@ -1663,8 +1688,10 @@ int main(){
             } else {
                 PrintAuthor(offset);
             }
+            cout << "=====================================================" << endl;
         }
         else if (choice == 6) {
+            cout << "=====================================================" << endl;
             char ISBN[15];
             cout << "Enter Book ISBN: ";
             cin >> ISBN;
@@ -1679,8 +1706,10 @@ int main(){
             {
                 PrintBook(offset);
             }
+            cout << "=====================================================" << endl;
         }
         else if (choice == 7) {
+            cout << "=====================================================" << endl;
             char AuthorID[15];
             cout << "Enter Author ID: ";
             cin >> AuthorID;
@@ -1689,8 +1718,10 @@ int main(){
                 continue;
             }
             DeleteAuthor(AuthorID);
+            cout << "=====================================================" << endl;
         }
         else if (choice == 8) {
+            cout << "=====================================================" << endl;
             char ISBN[20];
             cout << "Enter Book ISBN: ";
             cin >> ISBN;
@@ -1699,13 +1730,16 @@ int main(){
                 continue;
             }
             DeleteBook(ISBN);
+            cout << "=====================================================" << endl;
         }
         else if (choice == 9) {
+            cout << "=====================================================" << endl;
             string query;
             cout << "Enter query: ";
             cin.ignore();
             getline(cin, query);
             ExecuteQuery(query);
+            cout << "=====================================================" << endl;
         }
         else if (choice == 10) {
             Clear();
@@ -1713,10 +1747,15 @@ int main(){
             WriteInFirstOfBookFile();
         }
         else if (choice == 11) {
+            cout << "=====================================================" << endl;
+            cout << "Exiting the program ..." << endl;
+            cout << "=====================================================" << endl;
             break;
         }
         else {
+            cout << "=====================================================" << endl;
             cout << "Invalid Input" << endl;
+            cout << "=====================================================" << endl;
         }
     }
     return 0;
