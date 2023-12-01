@@ -653,14 +653,14 @@ void PrintAuthor (int offset) {
     getline(file, line);
 
     if (line[0] == '*') {
-        cout << "Author not found" << endl;
+        cout << "** Author not found **" << endl;
         file.close();
         return;
     }
     int size = atoi(line.substr(0, 2).c_str());
     line = line.substr(2, line.length());
     size -= 2;
-    cout << "Author ID: " << line.substr(0, line.find("|")) << endl;
+    cout << "==> Author ID: " << line.substr(0, line.find("|")) << endl;
     size -= line.substr(0, line.find("|")).length() + 1;
     line = line.substr(line.find("|") + 1, line.length());
     string name = line.substr(0, line.find("|")), temp;
@@ -671,7 +671,7 @@ void PrintAuthor (int offset) {
             temp += name[i];
         }
     }
-    cout << "Author Name: " << temp << endl;
+    cout << "==> Author Name: " << temp << endl;
     size -= line.substr(0, line.find("|")).length() + 1;
     line = line.substr(line.find("|") + 1, line.length());
     string address = line.substr(0, size), temp2;
@@ -682,7 +682,7 @@ void PrintAuthor (int offset) {
             temp2 += address[i];
         }
     }
-    cout << "Author Address: " << temp2 << endl;
+    cout << "==> Author Address: " << temp2 << endl;
 
     file.close();
 }
@@ -690,7 +690,7 @@ void PrintAuthor (int offset) {
 string GetAuthorIdFromBook(char ISBN[]) {
     int offset = SearchBookByISBN(ISBN);
     if (offset == -1) {
-        cout << "Book not found" << endl;
+        cout << "** Book not found **" << endl;
         return "";
     }
     fstream file("Book.txt", ios::in);
@@ -712,7 +712,7 @@ string GetAuthorIdFromBook(char ISBN[]) {
 string GetAuthorNameFromAuthorID(char ID[]) {
     int offset = SearchAuthorByID(ID);
     if (offset == -1) {
-        cout << "Author not found" << endl;
+        cout << "** Author not found **" << endl;
         return "";
     }
     fstream file("Author.txt", ios::in);
@@ -735,7 +735,7 @@ void PrintBook (int offset) {
     getline(file, line);
 
     if (line[0] == '*') {
-        cout << "Book not found" << endl;
+        cout << "** Book not found **" << endl;
         file.close();
         return;
     }
@@ -743,7 +743,7 @@ void PrintBook (int offset) {
     int size = atoi(line.substr(0, 2).c_str());
     line = line.substr(2, line.length());
     size -= 2;
-    cout << "Book ISBN: " << line.substr(0, line.find("|")) << endl;
+    cout << "==> Book ISBN: " << line.substr(0, line.find("|")) << endl;
     size -= line.substr(0, line.find("|")).length() + 1;
     line = line.substr(line.find("|") + 1, line.length());
     string Title = line.substr(0, line.find("|")), Title2;
@@ -754,7 +754,7 @@ void PrintBook (int offset) {
             Title2 += Title[i];
         }
     }
-    cout << "Book Title: " << Title2 << endl;
+    cout << "==> Book Title: " << Title2 << endl;
     size -= line.substr(0, line.find("|")).length() + 1;
     line = line.substr(line.find("|") + 1, line.length());
     string authorID = line.substr(0, size), authorID2;
@@ -765,7 +765,7 @@ void PrintBook (int offset) {
             authorID2 += authorID[i];
         }
     }
-    cout << "Book Author ID: " << authorID2 << endl;
+    cout << "==> Book Author ID: " << authorID2 << endl;
     file.close();
 }
 
@@ -774,23 +774,23 @@ void AddBook() {
     cout << "Enter Book ISBN: ";
     cin >> book.ISBN;
     if (!ValidationID(book.ISBN)) {
-        cout << "Invalid ISBN" << endl;
+        cout << "** Invalid ISBN **" << endl;
         return;
     }
     if (SearchBookByISBN(book.ISBN) != -1) {
-        cout << "Book already exists" << endl;
+        cout << "** Book already exists **" << endl;
         return;
     }
     cout << "Enter Book Title: ";
     cin >> book.Title;
     if (!ValidationName(book.Title)) {
-        cout << "Invalid Title" << endl;
+        cout << "** Invalid Title **" << endl;
         return;
     }
     cout << "Enter Book Author ID: ";
     cin >> book.AuthorID;
     if (SearchAuthorByID(book.AuthorID) == -1) {
-        cout << "Author doesn't exist" << endl;
+        cout << "** Author doesn't exist **" << endl;
         return;
     }
     BookPIndex bookPIndex;
@@ -816,7 +816,7 @@ void AddBook() {
     SortBookPIndex();
     SortBookSIndex();
     file.close();
-    cout << "Book added successfully" << endl;
+    cout << "** Book added successfully **" << endl;
 }
 
 void AddAuthor() {
@@ -824,23 +824,23 @@ void AddAuthor() {
     cout << "Enter Author ID: ";
     cin >> author.AuthorID;
     if (!ValidationID(author.AuthorID)) {
-        cout << "Invalid ID" << endl;
+        cout << "** Invalid ID **" << endl;
         return;
     }
     if (SearchAuthorByID(author.AuthorID) != -1) {
-        cout << "Author already exists" << endl;
+        cout << "** Author already exists **" << endl;
         return;
     }
     cout << "Enter Author Name: ";
     cin >> author.AuthorName;
     if (!ValidationName(author.AuthorName)) {
-        cout << "Invalid Name" << endl;
+        cout << "** Invalid Name **" << endl;
         return;
     }
     cout << "Enter Author Address: ";
     cin >> author.Address;
     if (!ValidationAddress(author.Address)) {
-        cout << "Invalid Address" << endl;
+        cout << "** Invalid Address **" << endl;
         return;
     }
     AuthorPIndex authorPIndex;
@@ -866,7 +866,7 @@ void AddAuthor() {
     SortAuthorPIndex();
     SortAuthorSIndex();
     file.close();
-    cout << "Author added successfully" << endl;
+    cout << "** Author added successfully **" << endl;
 }
 
 void Clear(){
@@ -892,7 +892,7 @@ void Clear(){
     file.close();
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////
 
 void DeleteFromPrimaryIndex(string primaryIndexFile, string key) {
     vector<Sorting> sorting;
@@ -1061,7 +1061,7 @@ void DeleteBook(char ISBN[]) {
     int offset = SearchBookByISBN(ISBN);
     string ID= GetAuthorIdFromBook(ISBN);
     if (offset == -1) {
-        cout << "Book ISBN doesn't exist" << endl;
+        cout << "** Book ISBN doesn't exist **" << endl;
         return;
     }
     fstream file("Book.txt", ios::in | ios::out);
@@ -1102,7 +1102,7 @@ void DeleteBook(char ISBN[]) {
     // add the offset to the avail list
     bookAvailList = offset;
     WriteBookAvailList(bookAvailList);
-    cout << "Book deleted successfully" << endl;
+    cout << "** Book deleted successfully **" << endl;
 }
 
 void DeleteInvertedListAuthor(string invertedListFile, int index, string ID) {
@@ -1242,7 +1242,7 @@ void DeleteAuthor(char ID[]) {
     int offset = SearchAuthorByID(ID);
     string Name= GetAuthorNameFromAuthorID(ID);
     if (offset == -1) {
-        cout << "Author ID doesn't exist" << endl;
+        cout << "** Author ID doesn't exist **" << endl;
         return;
     }
     fstream file("Author.txt", ios::in | ios::out);
@@ -1281,15 +1281,15 @@ void DeleteAuthor(char ID[]) {
     // add the offset to the avail list
     authorAvailList = offset;
     WriteAuthorAvailList(authorAvailList);
-    cout << "Author deleted successfully" << endl;
+    cout << "** Author deleted successfully **" << endl;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////
 
 void updateBookTitle(char ISBN[] ,char BookTitle [] ){
     int offset = SearchBookByISBN(ISBN);
     if(offset == -1){
-        cout << "ISBN doesn't exist" << endl;
+        cout << "** ISBN doesn't exist **" << endl;
         return;
     }
     fstream file("Book.txt", ios::in | ios::out);
@@ -1307,7 +1307,7 @@ void updateBookTitle(char ISBN[] ,char BookTitle [] ){
     string oldTitle =  line.substr(0, line.find("|"));
     file.close();
     if(oldTitle.length() < strlen(BookTitle)){
-        cout << "Book Title is too long"<< endl;
+        cout << "** Book Title is too long **"<< endl;
         return;
     }
     file.open("Book.txt", ios::in | ios::out);
@@ -1319,7 +1319,7 @@ void updateBookTitle(char ISBN[] ,char BookTitle [] ){
         file << "-";
     }
 
-    cout<<"update successfully"<<endl;
+    cout<<"** Updated successfully **"<<endl;
     file.close();
 }
 
@@ -1327,7 +1327,7 @@ void updateAuthorName(char AuthorID[] ,char AuthorName [] ) {
     int offset = SearchAuthorByID(AuthorID);
 
     if (offset == -1) {
-        cout << "Author ID doesn't exist" << endl;
+        cout << "** Author ID doesn't exist **" << endl;
         return;
     }
     fstream file("Author.txt", ios::in | ios::out);
@@ -1345,7 +1345,7 @@ void updateAuthorName(char AuthorID[] ,char AuthorName [] ) {
     string oldName = line.substr(0, line.find("|"));
     file.close();
     if (oldName.length() < strlen(AuthorName)) {
-        cout << "Author name is too long" << endl;
+        cout << "** Author name is too long **" << endl;
         return;
     }
     file.open("Author.txt", ios::in | ios::out);
@@ -1355,7 +1355,7 @@ void updateAuthorName(char AuthorID[] ,char AuthorName [] ) {
     for (int i = 0; i < empty; i++) {
         file << "-";
     }
-    cout << "update successfully" << endl;
+    cout << "** Updated successfully **" << endl;
     file.close();
 }
 
@@ -1398,7 +1398,7 @@ void updateAuthorName(char AuthorID[] ,char AuthorName [] ) {
 //    file.close();
 //}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////
 
 vector<string> ReadAllBooks(char authorId[]) {
     vector<string> bookISBNs;
@@ -1407,7 +1407,7 @@ vector<string> ReadAllBooks(char authorId[]) {
     // Open the secondary index file
     ifstream indexFile("BookSIndex.txt");
     if (!indexFile.is_open()) {
-        cout << "Error opening secondary index file" << endl;
+        cout << "** Error opening secondary index file **" << endl;
         return bookISBNs;
     }
 
@@ -1469,7 +1469,7 @@ string GetAuthorName(char authorId[]) {
 
     ifstream file1("AuthorSIndex.txt");
     if (!file1.is_open()) {
-        cout << "Error opening secondary index file" << endl;
+        cout << "** Error opening secondary index file **" << endl;
         return authorName;
     }
 
@@ -1524,7 +1524,7 @@ void ExecuteQuery(const string& query) {
     }
     // Check the type of query
     if (tokens.size() < 6) {
-        cout << "Invalid query format" << endl;
+        cout << "** Invalid query format **" << endl;
         return;
     }
     if (tokens[0] == "select" || tokens[0] == "SELECT")
@@ -1548,20 +1548,20 @@ void ExecuteQuery(const string& query) {
         if (select == "all" && file == "Author") {
             int offset = SearchAuthorByID(AuthorID);
             if (offset == -1) {
-                cout << "Author ID doesn't exist" << endl;
+                cout << "** Author ID doesn't exist **" << endl;
             } else {
                 PrintAuthor(offset);
             }
         }
         else if (select == "name" && file == "Author") {
             string authorName = GetAuthorName(AuthorID);
-            cout << "Author Name: " << authorName << endl;
+            cout << "==> Author Name: " << authorName << endl;
         }
         else if (select == "all" && file == "Book") {
             vector<string> bookISBNs = ReadAllBooks(AuthorID);
 
             if (bookISBNs.empty()) {
-                cout << "No books found for the given Author ID" << endl;
+                cout << "** No books found for the given Author ID **" << endl;
             } else {
                 // Loop through the ISBNs and print or process the corresponding books
                 for (const string& ISBN : bookISBNs) {
@@ -1575,11 +1575,11 @@ void ExecuteQuery(const string& query) {
             }
         }
     } else {
-        cout << "Invalid query" << endl;
+        cout << "** Invalid query **" << endl;
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////
 
 void WriteInFirstOfAuthorFile() {
     fstream file("Author.txt", ios::out | ios::app);
@@ -1601,7 +1601,13 @@ void WriteInFirstOfBookFile() {
         WriteBookAvailList(-1);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////
+
+void Separator() {
+    cout << "==========================================================================" << endl;
+}
+
+///////////////////////////////////////////
 
 int main(){
     WriteInFirstOfAuthorFile();
@@ -1609,7 +1615,7 @@ int main(){
 
     while (true){
         int choice;
-        cout << "=====================================================" << endl;
+        Separator();
         cout << "\t\t\t Library System \t\t\t" << endl;
         cout << "1- Add Author" << endl;
         cout << "2- Add Book" << endl;
@@ -1622,139 +1628,144 @@ int main(){
         cout << "9- Execute Query" << endl;
         cout << "10- Clear All Data From All Files" << endl;
         cout << "11- Exit" << endl;
+        Separator();
         cout << "Enter your choice: ";
         cin >> choice;
-        cout << "=====================================================" << endl;
+        Separator();
 
         if (choice == 1) {
-            cout << "=====================================================" << endl;
+            Separator();
             AddAuthor();
-            cout << "=====================================================" << endl;
+            Separator();
         } else if (choice == 2) {
-            cout << "=====================================================" << endl;
+            Separator();
             AddBook();
-            cout << "=====================================================" << endl;
+            Separator();
         } else if (choice == 3) {
-            cout << "=====================================================" << endl;
+            Separator();
             char AuthorID[15];
             cout << "Enter Author ID: ";
             cin >> AuthorID;
             if (!ValidationID(AuthorID)) {
-                cout << "Invalid ID" << endl;
+                cout << "** Invalid ID **" << endl;
                 continue;
             }
             char AuthorName[30];
             cout << "Enter new Author Address: ";
             cin >> AuthorName;
             if (!ValidationName(AuthorName)) {
-                cout << "Invalid Name" << endl;
+                cout << "** Invalid Name **" << endl;
                 continue;
             }
             updateAuthorName(AuthorID, AuthorName);
-            cout << "=====================================================" << endl;
+            Separator();
         } else if (choice == 4) {
-            cout << "=====================================================" << endl;
+            Separator();
             char ISBN[15];
             cout << "Enter ISBN: ";
             cin >>ISBN;
             if (!ValidationID(ISBN)) {
-                cout << "Invalid ISBN" << endl;
+                cout << "** Invalid ISBN **" << endl;
                 continue;
             }
             char bookTitle[30];
             cout << "Enter new book title: ";
             cin >> bookTitle;
             if (!ValidationName(bookTitle)) {
-                cout << "Invalid Title" << endl;
+                cout << "** Invalid Title **" << endl;
                 continue;
             }
             updateBookTitle(ISBN , bookTitle);
-            cout << "=====================================================" << endl;
+            Separator();
         }
         else if (choice == 5) {
-            cout << "=====================================================" << endl;
+            Separator();
             char ID[15];
             cout << "Enter Author ID: ";
             cin >> ID;
             if (!ValidationID(ID)) {
-                cout << "Invalid ID" << endl;
+                cout << "** Invalid ID **" << endl;
                 continue;
             }
             int offset = SearchAuthorByID(ID);
             if (offset == -1) {
-                cout << "Author ID doesn't exist" << endl;
+                cout << "** Author ID doesn't exist **" << endl;
             } else {
                 PrintAuthor(offset);
             }
-            cout << "=====================================================" << endl;
+            Separator();
         }
         else if (choice == 6) {
-            cout << "=====================================================" << endl;
+            Separator();
             char ISBN[15];
             cout << "Enter Book ISBN: ";
             cin >> ISBN;
             if (!ValidationID(ISBN)) {
-                cout << "Invalid ISBN" << endl;
+                cout << "** Invalid ISBN **" << endl;
                 continue;
             }
             int offset = SearchBookByISBN(ISBN);
             if (offset == -1) {
-                cout << "Book ISBN doesn't exist" << endl;
+                cout << "** Book ISBN doesn't exist **" << endl;
             } else
             {
                 PrintBook(offset);
             }
-            cout << "=====================================================" << endl;
+            Separator();
         }
         else if (choice == 7) {
-            cout << "=====================================================" << endl;
+            Separator();
             char AuthorID[15];
             cout << "Enter Author ID: ";
             cin >> AuthorID;
             if (!ValidationID(AuthorID)) {
-                cout << "Invalid ID" << endl;
+                cout << "** Invalid ID **" << endl;
                 continue;
             }
             DeleteAuthor(AuthorID);
-            cout << "=====================================================" << endl;
+            Separator();
         }
         else if (choice == 8) {
-            cout << "=====================================================" << endl;
+            Separator();
             char ISBN[20];
             cout << "Enter Book ISBN: ";
             cin >> ISBN;
             if (!ValidationID(ISBN)) {
-                cout << "Invalid ISBN" << endl;
+                cout << "** Invalid ISBN **" << endl;
                 continue;
             }
             DeleteBook(ISBN);
-            cout << "=====================================================" << endl;
+            Separator();
         }
         else if (choice == 9) {
-            cout << "=====================================================" << endl;
+            Separator();
             string query;
             cout << "Enter query: ";
             cin.ignore();
             getline(cin, query);
             ExecuteQuery(query);
-            cout << "=====================================================" << endl;
+            Separator();
         }
         else if (choice == 10) {
             Clear();
             WriteInFirstOfAuthorFile();
             WriteInFirstOfBookFile();
+            Separator();
+            cout << "** All data cleared successfully **" << endl;
+            Separator();
         }
         else if (choice == 11) {
-            cout << "=====================================================" << endl;
-            cout << "Exiting the program ..." << endl;
-            cout << "=====================================================" << endl;
+            Separator();
+            cout << "** Exiting the program ... **" << endl;
+            Separator();
             break;
         }
         else {
-            cout << "=====================================================" << endl;
-            cout << "Invalid Input" << endl;
-            cout << "=====================================================" << endl;
+            Separator();
+            cout << "** Invalid Input **" << endl;
+            Separator();
         }
     }
     return 0;
 }
+
