@@ -349,7 +349,7 @@ int  WriteAuthorInDataFile(Author author) {
     } else {
         file.close();
         file.open("Author.txt",ios::out | ios::in | ios::binary);
-        vector<pair<int,int>> offsets=ReturnAllAvaliableOffsets("\\Author.txt",ReadAuthorAvailList());
+        vector<pair<int,int>> offsets=ReturnAllAvaliableOffsets("Author.txt",ReadAuthorAvailList());
         int j = 0;
         for (int i=0;i<offsets.size();i++){
             if (offsets[i].second>=size){
@@ -819,6 +819,34 @@ void AddBook() {
     cout << "** Book added successfully **" << endl;
 }
 
+void AddBookAfterUpdate(Book book) {
+    BookPIndex bookPIndex;
+    fstream file("Book.txt", ios::in);
+    file.seekg(0, ios::end);
+    bookPIndex.offset = file.tellp();
+    if (bookPIndex.offset == -1) {
+        bookPIndex.offset = 0;
+    }
+    int Poffset=WriteBookInDataFile(book);
+    strcpy(bookPIndex.ISBN, book.ISBN);
+    if (Poffset == -1) {
+        InsertBookInPrimaryIndex(bookPIndex);
+    }
+    else{
+        bookPIndex.offset=Poffset;
+        InsertBookInPrimaryIndex(bookPIndex);
+    }
+    BookSIndex bookSIndex;
+    strcpy(bookSIndex.ISBN, book.ISBN);
+    strcpy(bookSIndex.AuthorID, book.AuthorID);
+    InsertBookInSecondaryIndex(bookSIndex);
+    SortBookPIndex();
+    SortBookSIndex();
+    file.close();
+    cout << "** Book added successfully **" << endl;
+}
+
+
 void AddAuthor() {
     Author author;
     cout << "Enter Author ID: ";
@@ -859,6 +887,38 @@ void AddAuthor() {
         authorPIndex.offset=prev;
         WriteAuthorInPrimaryIndex(authorPIndex);
     }
+    AuthorSIndex authorSIndex;
+    strcpy(authorSIndex.AuthorName, author.AuthorName);
+    strcpy(authorSIndex.AuthorID, author.AuthorID);
+    WriteAuthorInSecondaryIndex(authorSIndex);
+    SortAuthorPIndex();
+    SortAuthorSIndex();
+    file.close();
+    cout << "** Author added successfully **" << endl;
+}
+
+
+void AddAuthorAfterUpdated(Author author) {
+    AuthorPIndex authorPIndex;
+    fstream file("Author.txt", ios::in);
+
+    file.seekg(0, ios::end);
+    authorPIndex.offset = file.tellp();
+
+    if (authorPIndex.offset == -1) {
+        authorPIndex.offset = 0;
+    }
+    int prev =WriteAuthorInDataFile(author);
+    strcpy(authorPIndex.AuthorID, author.AuthorID);
+    if(prev==-1){
+        WriteAuthorInPrimaryIndex(authorPIndex);
+    }
+    
+    else{
+        authorPIndex.offset=prev;
+        WriteAuthorInPrimaryIndex(authorPIndex);
+    }
+
     AuthorSIndex authorSIndex;
     strcpy(authorSIndex.AuthorName, author.AuthorName);
     strcpy(authorSIndex.AuthorID, author.AuthorID);
@@ -1305,11 +1365,28 @@ void updateBookTitle(char ISBN[] ,char BookTitle [] ){
     oldsize += line.substr(0, line.find("|")).length()+1;
     line = line.substr(line.find("|") + 1, line.length());
     string oldTitle =  line.substr(0, line.find("|"));
-    file.close();
     if(oldTitle.length() < strlen(BookTitle)){
-        cout << "** Book Title is too long **"<< endl;
+        size -= line.substr(0, line.find("|")).length() + 1;
+        line = line.substr(line.find("|") + 1, line.length());
+        string AuthorID = line.substr(0, size);
+        
+        Book book;
+        strcpy(book.ISBN, ISBN);
+        strcpy(book.AuthorID, AuthorID.c_str());
+        strcpy(book.Title, BookTitle);
+        file.close();
+
+        DeleteBook(ISBN);
+        AddBookAfterUpdate(book);
+
+
+
+        cout<<"** Updated successfully **"<<endl;
         return;
     }
+
+    file.close();
+
     file.open("Book.txt", ios::in | ios::out);
     file.seekp(offset+oldsize, ios::beg);
     file<<BookTitle;
@@ -1343,11 +1420,28 @@ void updateAuthorName(char AuthorID[] ,char AuthorName [] ) {
     oldsize += line.substr(0, line.find("|")).length() + 1;
     line = line.substr(line.find("|") + 1, line.length());
     string oldName = line.substr(0, line.find("|"));
-    file.close();
     if (oldName.length() < strlen(AuthorName)) {
-        cout << "** Author name is too long **" << endl;
+        size -= line.substr(0, line.find("|")).length() + 1;
+        line = line.substr(line.find("|") + 1, line.length());
+        string address = line.substr(0, size);
+        
+        Author author;
+        strcpy(author.AuthorID, AuthorID);
+        strcpy(author.Address, address.c_str());
+        strcpy(author.AuthorName, AuthorName);
+
+        file.close();
+
+        DeleteAuthor(AuthorID);
+        AddAuthorAfterUpdated(author);
+
+
+
+        cout<<"** Updated successfully **"<<endl;
         return;
     }
+    
+    file.close();
     file.open("Author.txt", ios::in | ios::out);
     file.seekp(offset + oldsize, ios::beg);
     file << AuthorName;
@@ -1646,12 +1740,8 @@ int main(){
             char AuthorID[15];
             cout << "Enter Author ID: ";
             cin >> AuthorID;
-            if (!ValidationID(AuthorID)) {
-                cout << "** Invalid ID **" << endl;
-                continue;
-            }
             char AuthorName[30];
-            cout << "Enter new Author Address: ";
+            cout << "Enter new Author Name: ";
             cin >> AuthorName;
             if (!ValidationName(AuthorName)) {
                 cout << "** Invalid Name **" << endl;
@@ -1664,10 +1754,6 @@ int main(){
             char ISBN[15];
             cout << "Enter ISBN: ";
             cin >>ISBN;
-            if (!ValidationID(ISBN)) {
-                cout << "** Invalid ISBN **" << endl;
-                continue;
-            }
             char bookTitle[30];
             cout << "Enter new book title: ";
             cin >> bookTitle;
